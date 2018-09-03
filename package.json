@@ -1,6 +1,6 @@
 {
   "name": "tax-suite",
-  "version": "1.0",
+  "version": "1.0.0",
   "main": "index.js",
   "author": "David Wieland",
   "license": "MIT",
