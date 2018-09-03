@@ -38,8 +38,8 @@ class AppRouter extends React.Component {
                 <CssBaseline />
                 <BrowserRouter>
                     <div>  
-                        <Route component={AppBarTaxSuite} />
-                        <Route component={SideBar} />
+                        <Route path="/" component={AppBarTaxSuite} />
+                        <Route path="/" component={SideBar} />
                         <Switch>
                             <Route path="/dashboard" component={Dashboard} />
                             <Route component={PageNotFound} />
