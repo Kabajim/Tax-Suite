@@ -30,8 +30,6 @@ class AppRouter extends React.Component {
         },
       });
 
-    //  
-
     render() {
         return (
             <MuiThemeProvider theme={this.theme}>
