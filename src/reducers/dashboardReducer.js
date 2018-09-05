@@ -21,7 +21,7 @@ export default (state = dashboardReducerDefaultState, action) => {
       return {
         ...state,
         favorites: state.favorites.map((favorite) => {
-          if (favorite.linkID === action.linkID) {
+          if (favorite.id === action.favoriteID) {
             return {
             ...favorite,
             summary: action.summary,
@@ -38,7 +38,7 @@ export default (state = dashboardReducerDefaultState, action) => {
     case 'DELETE_FAVORITE':
       return {
         ...state,
-        favorites: state.favorites.filter(({ linkID }) => linkID !== action.linkID)
+        favorites: state.favorites.filter(({ id }) => id !== action.favoriteID)
       }; 
 
     case 'ADD_LINKCONTAINER':
@@ -159,6 +159,9 @@ export default (state = dashboardReducerDefaultState, action) => {
           }
         })
     };
+
+    case 'SET_DASHBOARDSTATE':
+      return action.dashboardState
 
     default:
       return state;

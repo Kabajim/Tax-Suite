@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { addLink, editLink, editFavorite } from '../../actions/dashboard'
+import { startAddLink, startEditLink, startEditFavorite } from '../../actions/dashboard'
 
 
 function getModalStyle() {
@@ -45,7 +45,7 @@ class ModalLinks extends React.Component {
     const summary = e.target.elements.newName.value;
     const link = e.target.elements.linkAdress.value;
     const image = e.target.elements.imageAdress.value;
-    this.props.dispatch(addLink({ containerID, summary, link, image }));
+    this.props.dispatch(startAddLink({ containerID, summary, link, image }));
     this.props.handleClose();
     }
 
@@ -56,10 +56,11 @@ class ModalLinks extends React.Component {
       const newSummary = e.target.elements.newName.value;
       const newLink = e.target.elements.linkAdress.value;
       const newImage = e.target.elements.imageAdress.value;
-      this.props.dispatch(editLink({ containerID, linkID, newSummary, newLink, newImage }));
+      this.props.dispatch(startEditLink(containerID, linkID, newSummary, newLink, newImage));
 
       if (this.props.linkFav === true) {
-        this.props.dispatch(editFavorite({ linkID, newSummary, newLink, newImage }))
+        const favoriteToEdit = this.props.favorites.find((favorite) => (favorite.linkID === linkID))
+        this.props.dispatch(startEditFavorite(favoriteToEdit, newSummary, newLink, newImage))
       }
 
       this.props.handleClose();
@@ -80,6 +81,7 @@ class ModalLinks extends React.Component {
               </Typography>
               <TextField 
               fullWidth
+              autoFocus
               required
               name="newName"
               label="Summary"
@@ -116,4 +118,10 @@ class ModalLinks extends React.Component {
   }
 }
 
-export default withStyles(styles)(connect()(ModalLinks));
+const mapStateToProps = (state) => {
+  return {
+    favorites: state.dashboard.favorites
+  };
+};
+
+export default withStyles(styles)(connect(mapStateToProps)(ModalLinks));

@@ -12,7 +12,7 @@ const styles = theme => ({
     root: {
         marginRight: theme.spacing.unit * 2,
         marginLeft: theme.spacing.unit * 2,
-        marginBottom: theme.spacing.unit * 4,
+        marginTop: theme.spacing.unit * 2,
         flexGrow: 1
     },
     paper: {

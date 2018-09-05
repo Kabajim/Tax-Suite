@@ -14,7 +14,7 @@ import StarIconFilled from '@material-ui/icons/Star';
 import Zoom from '@material-ui/core/Zoom';
 import Button from '@material-ui/core/Button';
 import StarIconEmpty from '@material-ui/icons/StarBorder';
-import { deleteLink, toggleLinkFavorite, addFavorite, deleteFavorite } from '../../actions/dashboard'
+import { startDeleteLink, startToggleLinkFavorite, startAddFavorite, startDeleteFavorite } from '../../actions/dashboard'
 
 
 
@@ -102,20 +102,22 @@ state = {
   };
 
   toggleFavorite = ({ containerID, link }) => {
-    this.props.dispatch(toggleLinkFavorite({ containerID, link }))
     if (link.isFav === false) {
-      this.props.dispatch(addFavorite({ link }))
+      this.props.dispatch(startAddFavorite({ link }))
     }
-    else if (link.isFav === true) {
-      this.props.dispatch(deleteFavorite({ link }))
+    else if (link.isFav === true) {  
+      const favoriteToDelete = this.props.favorites.find((favorite) => (favorite.linkID === link.id))
+      this.props.dispatch(startDeleteFavorite(favoriteToDelete))
     }
+    this.props.dispatch(startToggleLinkFavorite(containerID, link))
   };
 
+
   deleteLink = ({ link }) => {
-    this.props.dispatch(deleteLink({ containerID: this.props.containerID, linkID: link.id }))
     if (link.isFav === true) {
-      this.props.dispatch(deleteFavorite({ link }))
-    }
+      const favoriteToDelete = this.props.favorites.find((favorite) => (favorite.linkID === link.id))
+      this.props.dispatch(startDeleteFavorite(favoriteToDelete))}
+    this.props.dispatch(startDeleteLink(this.props.containerID, link.id))
   }
 
 render() {
@@ -177,7 +179,8 @@ const { classes } = this.props;
 const mapStateToProps = (state, props) => {
     return {
       editable: state.sidebar.editable,
-      links: state.dashboard.linkContainer.find((linkContainer) => props.containerID === linkContainer.id).links
+      links: state.dashboard.linkContainer.find((linkContainer) => props.containerID === linkContainer.id).links,
+      favorites: state.dashboard.favorites
     };
   };
 

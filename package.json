@@ -22,16 +22,17 @@
     "babel-preset-env": "1.7.0",
     "babel-preset-react": "6.24.1",
     "express": "4.16.3",
-    "immutability-helper": "2.7.1",
-    "jsonfile": "4.0.0",
+    "firebase": "5.4.2",
     "react": "16.4.2",
     "react-dom": "16.4.2",
     "react-redux": "5.0.7",
     "react-router-dom": "4.3.1",
     "redux": "4.0.0",
-    "uuid": "^3.3.2",
+    "redux-thunk": "2.3.0",
     "webpack": "4.16.5",
-    "webpack-cli": "3.1.0",
+    "webpack-cli": "3.1.0"
+  },
+  "devDependencies": {
     "webpack-dev-server": "3.1.5"
   }
 }

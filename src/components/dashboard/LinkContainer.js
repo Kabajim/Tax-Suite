@@ -10,7 +10,7 @@ import ExpansionPanelActions from '@material-ui/core/ExpansionPanelActions';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Divider from '@material-ui/core/Divider';
-import { deleteLinkContainer } from '../../actions/dashboard'
+import { startDeleteLinkContainer, startDeleteFavorite } from '../../actions/dashboard'
 import ModalContainer from './ModalContainer'
 import AddIcon from '@material-ui/icons/Add';
 import Zoom from '@material-ui/core/Zoom';
@@ -72,6 +72,17 @@ handleChange = (attribute) => (event) => {
 }) 
 }
 
+deleteContainer = (containerID) => {
+  const linksToCheck = this.props.linkContainer.find((linkContainer) => containerID === linkContainer.id).links
+  linksToCheck.forEach((link) => {
+    if (link.isFav === true){
+      const favoriteToDelete = this.props.favorites.find((favorite) => (favorite.linkID === link.id))
+      this.props.dispatch(startDeleteFavorite(favoriteToDelete))
+    }
+  })  
+  this.props.dispatch(startDeleteLinkContainer(containerID))
+
+}
 
 render () {
   
@@ -95,7 +106,7 @@ const { classes } = this.props;
           <IconButton className={classes.icon} onClick={() => {this.handleOpen(container.id, container.name)}}>
               <EditIcon />
             </IconButton>  
-          <IconButton className={classes.icon} onClick={() => {this.props.dispatch(deleteLinkContainer({ containerID: container.id }))}}>
+          <IconButton className={classes.icon} onClick={() => {this.deleteContainer(container.id)}}>
               <DeleteIcon />
             </IconButton>
           </ExpansionPanelActions>}
@@ -123,7 +134,8 @@ const { classes } = this.props;
 const mapStateToProps = (state) => {
     return {
       editable: state.sidebar.editable,
-      linkContainer: state.dashboard.linkContainer
+      linkContainer: state.dashboard.linkContainer,
+      favorites: state.dashboard.favorites
     };
   };
 

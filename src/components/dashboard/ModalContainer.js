@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import { addLinkContainer, editLinkContainer } from '../../actions/dashboard'
+import { startAddLinkContainer, startEditLinkContainer } from '../../actions/dashboard'
 
 function getModalStyle() {
   const top = 50;
@@ -41,20 +41,19 @@ class ModalContainer extends React.Component {
   addNewContainer = (e) => {
     e.preventDefault();
     const newName = e.target.elements.newName.value;
-    this.props.dispatch(addLinkContainer({name: newName }));
+    this.props.dispatch(startAddLinkContainer({name: newName }));
     this.props.handleClose();
     }
 
   editLinkContainer = (e) => {
     e.preventDefault();
     const newName = e.target.elements.newName.value;
-    this.props.dispatch(editLinkContainer({containerID: this.props.containerID, newName: newName}))
+    this.props.dispatch(startEditLinkContainer(this.props.containerID, newName))
     this.props.handleClose();
   }
 
   render() {
     const { classes } = this.props;
-    
     return (
       <div>
         <Modal
@@ -68,6 +67,7 @@ class ModalContainer extends React.Component {
               </Typography>
               <TextField 
               fullWidth
+              autoFocus
               required
               name = "newName"
               label = "Summary"
