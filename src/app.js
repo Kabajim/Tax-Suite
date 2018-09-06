@@ -3,8 +3,10 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import AppRouter from './routers/AppRouter'
 import configureStore from './store/configureStore';
-import { startSetDashboardState } from './actions/dashboard'
-import './firebase/firebase'
+import { startSetDashboardState, startClearDashboardState } from './actions/dashboard'
+import { login, logout } from './actions/auth'
+import LoadingPage from './components/basics/LoadingPage'
+import { firebase } from './firebase/firebase'
 
 const store = configureStore();
 
@@ -12,11 +14,27 @@ const jsx = (
     <Provider store={store}>
       <AppRouter />
     </Provider>
-  );
+);
 
-ReactDOM.render(<p>Loading...</p>, document.getElementById('root'));
+let hasRendered = false;
+const renderApp = () => {
+  if (!hasRendered) {
+    ReactDOM.render(jsx, document.getElementById('root'));
+    hasRendered = true;
+  }
+}
 
-store.dispatch(startSetDashboardState()).then(() => {
-  ReactDOM.render(jsx, document.getElementById('root'));
+ReactDOM.render(<LoadingPage />, document.getElementById('root'));
+
+firebase.auth().onAuthStateChanged((user) => {
+  if (user) {
+    store.dispatch(login(user))
+    store.dispatch(startSetDashboardState()).then(() => {
+      renderApp();
+    })
+  } else {
+    store.dispatch(startClearDashboardState())
+    store.dispatch(logout())
+    renderApp();
+  }
 })
-

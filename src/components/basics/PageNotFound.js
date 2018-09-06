@@ -1,13 +1,23 @@
 import React from 'react';
-import { Link} from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import Typography from '@material-ui/core/Typography';
 
-const PageNotFound = (props) => {
+export const PageNotFound = ({ isAuthenticated }) => ( 
 
-    props.history.push("/dashboard")
-
-    return (
-    <p>404! - <Link to="/dashboard">Go Home</Link></p>
+    isAuthenticated ? (
+        <Redirect to="/dashboard" />
+    ) : (
+        <Typography align="center" variant="headline" style={{
+        position: "relative",
+        top: 100
+        }}
+        >Please Login to use Tax-Suite</Typography>
     )
-}
+)
 
-export default PageNotFound;
+const mapStateToProps = (state) => ({
+    isAuthenticated: !!state.user.ID
+})
+
+export default connect(mapStateToProps)(PageNotFound);

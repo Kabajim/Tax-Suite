@@ -7,9 +7,10 @@ export const addFavorite = (newFavorite) => ({
 });
 
 export const startAddFavorite = ({ link }) => {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
         const newFavorite = { summary: link.summary, link: link.link, image: link.image, linkID: link.id }
-        database.ref("dashboard/favorites").push(newFavorite).then((ref) => {
+        database.ref(`users/${userID}/dashboard/favorites`).push(newFavorite).then((ref) => {
             dispatch(addFavorite({
                 id: ref.key,
                 ...newFavorite
@@ -28,8 +29,9 @@ export const editFavorite = (favoriteToEdit, newSummary, newLink, newImage) => (
 });
 
 export const startEditFavorite = (favoriteToEdit, newSummary, newLink, newImage) => {
-    return (dispatch) => {
-        database.ref(`dashboard/favorites/${favoriteToEdit.id}`).update({
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
+        database.ref(`users/${userID}/dashboard/favorites/${favoriteToEdit.id}`).update({
             summary: newSummary,
             link: newLink,
             image: newImage
@@ -47,8 +49,9 @@ export const deleteFavorite = (favoriteID) => ({
 );
 
 export const startDeleteFavorite = ({ id }) => {
-    return (dispatch) => {
-        database.ref(`dashboard/favorites/${id}`).remove().then(() => {
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
+        database.ref(`users/${userID}/dashboard/favorites/${id}`).remove().then(() => {
             dispatch(deleteFavorite(id))
         })
     }
@@ -61,9 +64,10 @@ export const addLinkContainer = (newContainer) => ({
 });
 
 export const startAddLinkContainer = ({ name }) => {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
         const newContainer = { name, links: {} };
-        database.ref("dashboard/linkContainer").push(newContainer).then((ref) => {
+        database.ref(`users/${userID}/dashboard/linkContainer`).push(newContainer).then((ref) => {
             dispatch(addLinkContainer({
                 id: ref.key,
                 ...newContainer,
@@ -81,8 +85,9 @@ export const editLinkContainer = (containerID, newName) => ({
 });
 
 export const startEditLinkContainer = (containerID, newName) => {
-    return (dispatch) => {
-        database.ref(`dashboard/linkContainer/${containerID}`).update({name: newName}).then(() => {
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
+        database.ref(`users/${userID}/dashboard/linkContainer/${containerID}`).update({name: newName}).then(() => {
             dispatch(editLinkContainer(containerID, newName))
         })
     }
@@ -95,8 +100,9 @@ export const deleteLinkContainer = (containerID) => ({
 });
 
 export const startDeleteLinkContainer = (containerID) => {
-    return (dispatch) => {
-        database.ref(`dashboard/linkContainer/${containerID}`).remove().then(() => {
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
+        database.ref(`users/${userID}/dashboard/linkContainer/${containerID}`).remove().then(() => {
             dispatch(deleteLinkContainer(containerID))
         })
     }
@@ -110,9 +116,10 @@ export const addLink = (containerID, newLink) => ({
 });
 
 export const startAddLink = ({ containerID, summary, link, image }) => {
-    return (dispatch) => {
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
         const newLink = { summary, link, image, isFav: false };
-        database.ref(`dashboard/linkContainer/${containerID}/links`).push(newLink).then((ref) => {
+        database.ref(`users/${userID}/dashboard/linkContainer/${containerID}/links`).push(newLink).then((ref) => {
             dispatch(addLink(
                 containerID,
                 {
@@ -134,8 +141,9 @@ export const editLink = (containerID, linkID, newSummary, newLink, newImage) => 
 });
 
 export const startEditLink = (containerID, linkID, newSummary, newLink, newImage) => {
-    return (dispatch) => {
-        database.ref(`dashboard/linkContainer/${containerID}/links/${linkID}`).update({
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
+        database.ref(`users/${userID}/dashboard/linkContainer/${containerID}/links/${linkID}`).update({
             summary: newSummary,
             link: newLink,
             image: newImage
@@ -153,8 +161,9 @@ export const toggleLinkFavorite = (containerID, link) => ({
 });
 
 export const startToggleLinkFavorite = (containerID, link) => {
-    return (dispatch) => {
-        database.ref(`dashboard/linkContainer/${containerID}/links/${link.id}`).update({isFav: !link.isFav}).then((ref) => {
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
+        database.ref(`users/${userID}/dashboard/linkContainer/${containerID}/links/${link.id}`).update({isFav: !link.isFav}).then((ref) => {
             dispatch(toggleLinkFavorite(
                 containerID,
                 link
@@ -171,8 +180,9 @@ export const deleteLink = (containerID, linkID) => ({
 });
 
 export const startDeleteLink = (containerID, linkID) => {
-    return (dispatch) => {
-        database.ref(`dashboard/linkContainer/${containerID}/links/${linkID}`).remove().then(() => {
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
+        database.ref(`users/${userID}/dashboard/linkContainer/${containerID}/links/${linkID}`).remove().then(() => {
             dispatch(deleteLink(containerID, linkID))
         })
     }
@@ -186,8 +196,9 @@ export const setDashboardState = (dashboardState) => ({
 });
 
 export const startSetDashboardState = () => {
-    return (dispatch) => {
-        return database.ref('dashboard').once('value').then((snapshot) => {
+    return (dispatch, getState) => {
+        const userID = getState().user.ID
+        return database.ref(`users/%{userID}/dashboard`).once('value').then((snapshot) => {
             
             const favorites = [];
             const linkContainer = [];
@@ -224,9 +235,15 @@ export const startSetDashboardState = () => {
                         break;
                 }
             })
-
             dispatch(setDashboardState({favorites, linkContainer}))
         });
     }
+}
 
+export const startClearDashboardState = (props) => {
+    return (dispatch) => {
+        const favorites = [];
+        const linkContainer = [];
+        dispatch(setDashboardState({favorites, linkContainer}))
+    }
 }

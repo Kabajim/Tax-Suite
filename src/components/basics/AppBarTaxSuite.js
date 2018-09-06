@@ -7,7 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Switch from '@material-ui/core/Switch';
+import Button from '@material-ui/core/Button';
 import { toggleOpen, toggleEditable } from '../../actions/sidebar'
+import { startLogin, startLogout } from '../../actions/auth'
 
 const styles = theme => ({
   root: {
@@ -35,6 +37,9 @@ const styles = theme => ({
   flex: {
     flexGrow: 1,
   },
+  button: {
+    marginRight: theme.spacing.unit
+  }
 });
 
 const AppBarTaxSuite = (props) => {
@@ -73,6 +78,12 @@ const AppBarTaxSuite = (props) => {
           value="editable"
           color="secondary"
           />
+          <Button variant="contained" color="secondary" className={classes.button} onClick={() => {props.dispatch(startLogin())}}>
+            Login
+          </Button>
+          <Button variant="contained" color="secondary" className={classes.button} onClick={() => {props.dispatch(startLogout())}}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
       </div>

@@ -6,7 +6,7 @@ import PageNotFound from '../components/basics/PageNotFound'
 import Dashboard from '../components/dashboard/Dashboard'
 import AppBarTaxSuite from '../components/basics/AppBarTaxSuite'
 import SideBar from '../components/basics/SideBar'
-
+import PrivateRoute from './PrivateRoute'
 
 class AppRouter extends React.Component {
  
@@ -39,7 +39,7 @@ class AppRouter extends React.Component {
                         <Route path="/" component={AppBarTaxSuite} />
                         <Route path="/" component={SideBar} />
                         <Switch>
-                            <Route path="/dashboard" component={Dashboard} />
+                            <PrivateRoute path="/dashboard" component={Dashboard} />
                             <Route component={PageNotFound} />
                         </Switch>
                     </div>
