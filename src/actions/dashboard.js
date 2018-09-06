@@ -198,7 +198,7 @@ export const setDashboardState = (dashboardState) => ({
 export const startSetDashboardState = () => {
     return (dispatch, getState) => {
         const userID = getState().user.ID
-        return database.ref(`users/%{userID}/dashboard`).once('value').then((snapshot) => {
+        return database.ref(`users/${userID}/dashboard`).once('value').then((snapshot) => {
             
             const favorites = [];
             const linkContainer = [];
