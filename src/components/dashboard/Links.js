@@ -71,6 +71,10 @@ button: {
 },
 grid: {
   height: theme.spacing.unit * 30
+},
+imageSize: {
+  height: "100%",
+  width: "100%"
 }
 });
 
@@ -128,14 +132,14 @@ const { classes } = this.props;
     <Grid className={classes.gridContainer} container spacing={8}>   
                     {this.props.links.map((link) => {
                         return(
-                        <Grid item xl={2} lg={3} md={4} xs={6} key={link.id}>
+                        <Grid item xl={2} lg={3} md={4} sm={6} xs={12} key={link.id}>
                           <Paper className={classes.paper}>   
                             <GridListTile component="div" classes={{root: classes.gridListTile}}>
                               <IconButton className={classes.iconStar} classes={{root: classes.rootFavIcon}} onClick={() => this.toggleFavorite({ containerID: this.props.containerID, link })}>
                                 {link.isFav ? <StarIconFilled /> : <StarIconEmpty />}
                               </IconButton>
                               <a href={link.link} target="_blanket">
-                              <img src={link.image} alt={link.summary} />
+                              <img src={link.image} alt={link.summary} className={classes.imageSize} />
                               </a>
                               <GridListTileBar title={link.summary} actionIcon={this.props.editable &&
                                 <div>

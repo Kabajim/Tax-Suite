@@ -72,18 +72,23 @@ const AppBarTaxSuite = (props) => {
           <Typography variant="title" color="inherit" className={classes.flex} noWrap>
             {currentPage((props.location.pathname.split("/")[1]))}
           </Typography>
-          <Switch
-          checked={props.editable}
-          onChange={() => {props.dispatch(toggleEditable())}}
-          value="editable"
-          color="secondary"
-          />
-          <Button variant="contained" color="secondary" className={classes.button} onClick={() => {props.dispatch(startLogin())}}>
-            Login
-          </Button>
+          {props.userLoggedIn && 
+            <Switch
+            checked={props.editable}
+            onChange={() => {props.dispatch(toggleEditable())}}
+            value="editable"
+            color="secondary"
+            />
+          }
+          {props.userLoggedIn ? (
           <Button variant="contained" color="secondary" className={classes.button} onClick={() => {props.dispatch(startLogout())}}>
             Logout
           </Button>
+          ) : (
+          <Button variant="contained" color="secondary" className={classes.button} onClick={() => {props.dispatch(startLogin())}}>
+            Login
+          </Button>
+          )}
         </Toolbar>
       </AppBar>
       </div>
@@ -92,7 +97,8 @@ const AppBarTaxSuite = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-      editable: state.sidebar.editable
+      editable: state.sidebar.editable,
+      userLoggedIn: !!state.user.ID
     };
   };
 

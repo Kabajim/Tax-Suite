@@ -37,7 +37,7 @@ const styles = theme => ({
                 <Grid className={classes.gridContainer} container spacing={8} justify="space-around">  
                     {props.favorites.map((fav) => {
                         return(
-                        <Grid item xl={2} lg={3} md={4} xs={6} key={fav.id}>
+                        <Grid item xl={2} lg={3} md={4} sm={6} xs={12} key={fav.id}>
                         <Paper className={classes.paper}>
                             <GridListTile component="div" classes={{root: classes.gridListTile}}>
                                 <a href={fav.link} target="_blanket">
